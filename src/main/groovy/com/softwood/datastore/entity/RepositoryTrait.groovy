@@ -1,7 +1,5 @@
 package com.softwood.datastore.entity
 
-import com.softwood.DataRoot
-import org.codehaus.groovy.runtime.metaclass.ThreadManagedMetaBeanProperty
 
 import java.lang.reflect.Constructor
 import java.util.concurrent.ConcurrentHashMap
@@ -18,9 +16,9 @@ trait RepositoryTrait<ID, T> {
         String name = this.getClass().canonicalName
         String actualClassName = name - "Repository"
 
-        List classInstanceList = Database.getEntityByTypeList(actualClassName)
+        Map classInstanceMap = Database.getEntityByTypeList(actualClassName)
 
-        assert references == classInstanceList
+        assert references == classInstanceMap
 
         //list of saved instances of appropriate concrete repository class
         references

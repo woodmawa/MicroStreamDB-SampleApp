@@ -2,11 +2,12 @@ package com.softwood.datastore.entity
 
 import com.softwood.DataRoot
 import one.microstream.concurrency.XThreads
-import one.microstream.storage.embedded.types.EmbeddedStorageManager
 import one.microstream.storage.embedded.types.EmbeddedStorage
+import one.microstream.storage.embedded.types.EmbeddedStorageManager
 
-import java.nio.file.Paths
 import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.concurrent.ConcurrentHashMap
 
 class Database {
 
@@ -14,6 +15,7 @@ class Database {
     static EmbeddedStorageManager storage
     static private Path DEFAULT_STORAGE_PATH = Paths.get("data")
     static private DataRoot root = new DataRoot()
+
     static private long rootObjId
     static List errors = []
 
@@ -72,7 +74,7 @@ class Database {
 
         XThreads.executeSynchronized(() -> {
             entitiesResultId = storage.store(root.entities)
-            }
+        }
         )
 
         entitiesResultId
@@ -84,9 +86,9 @@ class Database {
 
         if (errors) errors.clear()  //clear any outstanding errors before save
 
-         XThreads.executeSynchronized(() -> {
-             entitiesDictionaryId = storage.store(root.entityTypeDictionary)
-            }
+        XThreads.executeSynchronized(() -> {
+            entitiesDictionaryId = storage.store(root.entityTypeDictionary)
+        }
         )
 
         entitiesDictionaryId
@@ -96,10 +98,12 @@ class Database {
         root.entities
     }
 
-    static List getEntityByTypeList (String typeName) {
+    static Map getEntityByTypeList (String typeName) {
 
         //todo should we set errors if requested class type doesn't exist
-        root.entityTypeDictionary[typeName] ?: []
+        Map res = root.entityTypeDictionary[typeName]
+        res ?: [:]
+
     }
 
     static boolean shutdown() {
@@ -108,4 +112,5 @@ class Database {
         //storage.close()
         storage.shutdown()
     }
+
 }

@@ -1,13 +1,7 @@
 package com.softwood
 
-import com.softwood.datastore.entity.AnyTrait
-import com.softwood.datastore.entity.Database
-import com.softwood.datastore.entity.Entity
-import one.microstream.concurrency.XThreads
-import one.microstream.storage.embedded.types.EmbeddedStorage
-import one.microstream.storage.embedded.types.EmbeddedStorageManager
 
-import java.nio.file.Paths
+import com.softwood.datastore.entity.Database
 
 class Application {
 
@@ -73,5 +67,6 @@ class Application {
         Database.shutdown()
 
         System.exit (0)  //need this else its sitting on a thread somewhere
+
     }
 }
